@@ -1,0 +1,23 @@
+node_modules/
+dist/
+vendor/
+.fvtt-cli/
+.pnpm-store/
+
+# Node logs
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Test and coverage artifacts
+coverage/
+.nyc_output/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# macOS metadata
+.DS_Store

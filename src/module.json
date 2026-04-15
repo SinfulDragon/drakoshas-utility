@@ -1,0 +1,42 @@
+{
+  "id": "drakoshas-utility",
+  "title": "Drakosha's Utility",
+  "description": "Utility module for Foundry Virtual Tabletop with PF2E support.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Drakosha"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.351",
+    "maximum": "13"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "7.12.2",
+          "verified": "7.12.2"
+        }
+      }
+    ]
+  },
+  "esmodules": ["scripts/index.js"],
+  "styles": ["styles/module.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "ru",
+      "name": "Русский",
+      "path": "lang/ru.json"
+    }
+  ]
+}

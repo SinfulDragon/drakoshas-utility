@@ -1,0 +1,36 @@
+{
+  "name": "drakoshas-utility",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "sync:pf2e-types": "bash scripts/sync-pf2e-types.sh",
+    "clean": "rm -rf dist",
+    "dev": "vite build --watch --mode development",
+    "build": "pnpm sync:pf2e-types && vite build",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "foundry:configure": "fvtt configure",
+    "foundry:launch": "fvtt launch",
+    "link": "node scripts/link-module.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@foundryvtt/foundryvtt-cli": "^3.0.3",
+    "eslint": "^10.2.0",
+    "globals": "^17.5.0",
+    "prettier": "^3.8.3",
+    "sass": "^1.99.0",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "vite": "^8.0.8",
+    "vite-plugin-static-copy": "^4.0.1",
+    "vitest": "^4.1.4"
+  }
+}
