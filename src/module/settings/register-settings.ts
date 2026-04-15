@@ -1,12 +1,5 @@
-import { moduleId } from "../helpers";
+import { moduleId } from "../helpers.ts";
 
 export function registerSettings(): void {
-  game.settings.register(moduleId(), "example-setting", {
-    name: "Drakosha's Utility: Example Setting",
-    hint: "Example world setting scaffold.",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true
-  });
+  console.log(`${moduleId()} - Registering settings`);
 }

@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "lib": ["ES2023", "DOM"],
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2024", "DOM"],
     "strict": true,
     "allowJs": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@common/*": ["types/foundry/common/*"],
+      "@client/*": ["types/foundry/client/*"]
     },
     "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.json", "types/**/*.d.ts", "tests/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.json", "tests/**/*.ts", "types/globals.d.ts"]
 }

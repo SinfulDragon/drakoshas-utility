@@ -5,6 +5,9 @@
   },
   "remoteUser": "node",
   "workspaceFolder": "/workspaces/drakoshas-utility",
+  "remoteEnv": {
+    "PATH": "/usr/local/bin:/usr/local/sbin:${PATH}"
+  },
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "customizations": {
     "vscode": {
