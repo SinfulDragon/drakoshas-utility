@@ -1,1 +1,1 @@
-/// <reference path="./foundry/global-external.d.mts" />
+import "./foundry/global-external.d.mts";

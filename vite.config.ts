@@ -15,7 +15,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith(".css")) return "styles/module.css";
+          const assetName = assetInfo.names[0] ?? "";
+          if (assetName.endsWith(".css")) return "styles/module.css";
           return "assets/[name][extname]";
         }
       }
@@ -29,20 +30,14 @@ export default defineConfig({
   plugins: [
     viteStaticCopy({
       targets: [
-        { src: "src/module.json", dest: "." },
-        { src: "src/lang/*.json", dest: "lang" },
-        { src: "src/templates/**/*", dest: "templates" },
-        { src: "static/assets/**/*", dest: "assets" },
-        { src: "static/icons/**/*", dest: "icons" },
-        { src: "static/packs/**/*", dest: "packs" }
+        { src: "src/module.json", dest: ".", rename: { stripBase: true } },
+        { src: "src/lang/*.json", dest: "lang", rename: { stripBase: true } }
       ]
     })
   ],
   css: {
     preprocessorOptions: {
-      scss: {
-        api: "modern"
-      }
+      scss: {}
     }
   }
 });

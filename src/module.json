@@ -2,10 +2,10 @@
   "id": "drakoshas-utility",
   "title": "Drakosha's Utility",
   "description": "Utility module for Foundry Virtual Tabletop with PF2E support.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "authors": [
     {
-      "name": "Drakosha"
+      "name": "SinfulDragon"
     }
   ],
   "compatibility": {
@@ -25,6 +25,9 @@
       }
     ]
   },
+  "url": "https://github.com/SinfulDragon/drakoshas-utility",
+  "manifest": "https://github.com/SinfulDragon/drakoshas-utility/releases/latest/download/module.json",
+  "download": "https://github.com/SinfulDragon/drakoshas-utility/releases/latest/download/module.zip",
   "esmodules": ["scripts/index.js"],
   "styles": ["styles/module.css"],
   "languages": [

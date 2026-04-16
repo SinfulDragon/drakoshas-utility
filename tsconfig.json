@@ -17,7 +17,7 @@
       "@common/*": ["types/foundry/common/*"],
       "@client/*": ["types/foundry/client/*"]
     },
-    "types": ["vite/client"]
+    "types": ["vite/client", "node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.json", "tests/**/*.ts", "types/globals.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.json", "tests/**/*.ts", "types/globals.d.ts", "vite.config.ts"]
 }

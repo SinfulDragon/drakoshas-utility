@@ -1,6 +1,6 @@
 {
   "name": "drakoshas-utility",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.33.0",
@@ -18,11 +18,13 @@
     "test:watch": "vitest",
     "foundry:configure": "fvtt configure",
     "foundry:launch": "fvtt launch",
-    "link": "node scripts/link-module.mjs"
+    "link": "node scripts/link-module.mjs",
+    "version:sync": "node scripts/sync-version.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@foundryvtt/foundryvtt-cli": "^3.0.3",
+    "@types/node": "^25.6.0",
     "eslint": "^10.2.0",
     "globals": "^17.5.0",
     "pixi.js": "7.4.3",

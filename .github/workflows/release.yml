@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Strip leading "v" from the tag (v1.2.3 → 1.2.3)
+      - name: Extract version
+        id: version
+        run: echo "value=${GITHUB_EVENT_RELEASE_TAG_NAME#v}" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_EVENT_RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+
+      # Bump version in package.json without creating a git commit/tag
+      - name: Bump package.json version
+        run: npm version "${{ steps.version.outputs.value }}" --no-git-tag-version
+
+      # Write version + download/manifest URLs into src/module.json
+      - name: Sync version to module.json
+        run: |
+          node scripts/sync-version.mjs \
+            --download-url "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.zip" \
+            --manifest-url "https://github.com/${{ github.repository }}/releases/download/${{ github.event.release.tag_name }}/module.json"
+
+      - name: Build
+        run: pnpm build
+
+      # Copy the final module.json into dist so it ships with the zip and also
+      # as a standalone asset (Foundry uses it for auto-update checks)
+      - name: Copy module.json to dist
+        run: cp src/module.json dist/module.json
+
+      - name: Create module.zip
+        run: |
+          cd dist
+          zip -r ../module.zip .
+
+      # Upload assets to the release that was already created via GitHub UI
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            module.zip
+            dist/module.json
