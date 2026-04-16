@@ -1,0 +1,41 @@
+import type { ActorPF2e } from "@actor";
+import type { SenseAcuity, SenseType } from "@actor/creature/types.js";
+import type { OnSubmitFormOptions } from "@client/appv1/api/form-application-v1.d.mts";
+import { BaseTagSelector, TagSelectorData, TagSelectorOptions } from "./base.js";
+import type { SelectableTagField } from "./index.js";
+declare class SenseSelector<TActor extends ActorPF2e> extends BaseTagSelector<TActor> {
+    protected objectProperty: string;
+    static get defaultOptions(): TagSelectorOptions;
+    protected get configTypes(): readonly SelectableTagField[];
+    getData(options?: Partial<TagSelectorOptions>): Promise<SenseSelectorData<TActor>>;
+    activateListeners($html: JQuery): void;
+    /** Clear checkboxes with empty range inputs */
+    protected _onSubmit(event: Event, options?: OnSubmitFormOptions | undefined): Promise<Record<string, unknown> | false>;
+    protected _updateObject(event: Event, formData: SenseFormData): Promise<void>;
+}
+interface SenseSelector<TActor extends ActorPF2e> extends BaseTagSelector<TActor> {
+    choices: Record<SenseType, string>;
+}
+interface SenseSelectorData<TActor extends ActorPF2e> extends TagSelectorData<TActor> {
+    hasExceptions: boolean;
+    choices: Record<string, SenseChoiceData>;
+    senseAcuities: typeof CONFIG.PF2E.senseAcuities;
+    vision: {
+        value: boolean;
+        editable: boolean;
+        source: string | null;
+    };
+}
+interface SenseChoiceData {
+    selected: boolean;
+    acuity: SenseAcuity;
+    label: string;
+    range: number | null;
+    canSetAcuity: boolean;
+    canSetRange: boolean;
+    source: string | null;
+}
+type SenseFormData = {
+    "system.perception.vision"?: boolean;
+} & Record<string, [boolean, string, number | null]>;
+export { SenseSelector };

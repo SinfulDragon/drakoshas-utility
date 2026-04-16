@@ -1,0 +1,12 @@
+declare const TAG_SELECTOR_TYPES: readonly ["basic", "languages", "senses", "speed-types"];
+type TagSelectorType = (typeof TAG_SELECTOR_TYPES)[number];
+declare const SELECTABLE_TAG_FIELDS: readonly ["abilities", "actionTraits", "attackEffects", "creatureTraits", "damageCategories", "levels", "materialDamageEffects", "otherArmorTags", "otherConsumableTags", "otherWeaponTags", "senses", "skills", "vehicleTraits", "weaponTraits"];
+type SelectableTagField = (typeof SELECTABLE_TAG_FIELDS)[number] | "languages";
+export type { TagSelectorOptions } from "./base.js";
+export { TagSelectorBasic } from "./basic.js";
+export type { BasicConstructorOptions, BasicSelectorOptions } from "./basic.js";
+export { LanguageSelector } from "./languages.js";
+export { SenseSelector } from "./senses.js";
+export { SpeedSelector } from "./speeds.js";
+export { SELECTABLE_TAG_FIELDS, TAG_SELECTOR_TYPES };
+export type { SelectableTagField, TagSelectorType };

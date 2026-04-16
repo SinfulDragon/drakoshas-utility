@@ -1,0 +1,5 @@
+/**
+ * Classes don't have traits other than rarities, but both feats, spells, and other items can have traits corresponding
+ * with a class
+ */
+export declare const CLASS_TRAITS: Set<"alchemist" | "animist" | "barbarian" | "bard" | "champion" | "cleric" | "commander" | "druid" | "envoy" | "exemplar" | "fighter" | "guardian" | "gunslinger" | "kineticist" | "inventor" | "investigator" | "magus" | "monk" | "mystic" | "operative" | "oracle" | "psychic" | "ranger" | "rogue" | "solarian" | "soldier" | "sorcerer" | "summoner" | "swashbuckler" | "thaumaturge" | "witch" | "witchwarper" | "wizard">;

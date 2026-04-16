@@ -3,7 +3,10 @@
     "target": "ES2024",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": ["ES2024", "DOM"],
+    "lib": [
+      "ES2024",
+      "DOM"
+    ],
     "strict": true,
     "allowJs": false,
     "resolveJsonModule": true,
@@ -13,11 +16,60 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@common/*": ["types/foundry/common/*"],
-      "@client/*": ["types/foundry/client/*"]
+      "@actor": [
+        "types/pf2e/module/actor/index.d.ts"
+      ],
+      "@actor/*": [
+        "types/pf2e/module/actor/*"
+      ],
+      "@item": [
+        "types/pf2e/module/item/index.d.ts"
+      ],
+      "@item/*": [
+        "types/pf2e/module/item/*"
+      ],
+      "@scene": [
+        "types/pf2e/module/scene/index.d.ts"
+      ],
+      "@scene/*": [
+        "types/pf2e/module/scene/*"
+      ],
+      "@system/*": [
+        "types/pf2e/module/system/*"
+      ],
+      "@module/*": [
+        "types/pf2e/module/*"
+      ],
+      "@scripts/*": [
+        "types/pf2e/scripts/*"
+      ],
+      "@util": [
+        "types/pf2e/util/index.d.ts"
+      ],
+      "@util/*": [
+        "types/pf2e/util/*"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+      "@common/*": [
+        "types/foundry/common/*"
+      ],
+      "@client/*": [
+        "types/foundry/client/*"
+      ]
     },
-    "types": ["vite/client", "node"]
+    "types": [
+      "vite/client",
+      "node"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.json", "tests/**/*.ts", "types/globals.d.ts", "vite.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.json",
+    "tests/**/*.ts",
+    "types/globals.d.ts",
+    "types/pf2e/**/*.d.ts",
+    "vite.config.ts"
+  ]
 }

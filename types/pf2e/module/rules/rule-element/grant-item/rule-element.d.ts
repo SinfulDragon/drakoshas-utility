@@ -1,0 +1,49 @@
+import type { ActorType } from "@actor";
+import type { SourceFromSchema } from "@common/data/fields.d.mts";
+import type { ItemSourcePF2e } from "@item/base/data/index.js";
+import type { ItemGrantDeleteAction } from "@item/base/data/system.js";
+import { RuleElement, RuleElementOptions } from "../base.js";
+import type { ModelPropsFromRESchema, RuleElementSource } from "../data.js";
+import type { GrantItemSchema } from "./schema.js";
+declare class GrantItemRuleElement extends RuleElement<GrantItemSchema> {
+    #private;
+    static validActorTypes: ActorType[];
+    /** The id of the granted item */
+    grantedId: string | null;
+    /**
+     * If the granted item has a `ChoiceSet`, its selection may be predetermined. The key of the record must be the
+     * `ChoiceSet`'s designated `flag` property.
+     */
+    preselectChoices: Record<string, string | number>;
+    /** Actions taken when either the parent or child item are deleted */
+    onDeleteActions: OnDeleteActions | null;
+    constructor(data: GrantItemSource, options: RuleElementOptions);
+    static defineSchema(): GrantItemSchema;
+    static ON_DELETE_ACTIONS: readonly ["cascade", "detach", "restrict"];
+    static validateJoint(data: SourceFromSchema<GrantItemSchema>): void;
+    preCreate(args: RuleElement.PreCreateParams): Promise<void>;
+    /** Grant an item if this rule element permits it and the predicate passes */
+    preUpdateActor(): Promise<{
+        create: ItemSourcePF2e[];
+        delete: string[];
+    }>;
+    /** Add an in-memory-only condition to the actor */
+    onApplyActiveEffects(): void;
+}
+interface GrantItemRuleElement extends RuleElement<GrantItemSchema>, ModelPropsFromRESchema<GrantItemSchema> {
+}
+interface GrantItemSource extends RuleElementSource {
+    uuid?: unknown;
+    preselectChoices?: unknown;
+    reevaluateOnUpdate?: unknown;
+    inMemoryOnly?: unknown;
+    allowDuplicate?: unknown;
+    onDeleteActions?: unknown;
+    flag?: unknown;
+    alterations?: unknown;
+}
+interface OnDeleteActions {
+    granter: ItemGrantDeleteAction | null;
+    grantee: ItemGrantDeleteAction | null;
+}
+export { GrantItemRuleElement, type GrantItemSource };

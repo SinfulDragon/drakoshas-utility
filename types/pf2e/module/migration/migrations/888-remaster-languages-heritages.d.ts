@@ -1,0 +1,10 @@
+import { ActorSourcePF2e } from "@actor/data/index.js";
+import { ItemSourcePF2e } from "@item/base/data/index.js";
+import { MigrationBase } from "../base.js";
+/** Convert weapons with the "crossbow" tag to the PC1 crossbow group */
+export declare class Migration888RemasterLanguagesHeritages extends MigrationBase {
+    #private;
+    static version: number;
+    updateActor(source: ActorSourcePF2e): Promise<void>;
+    updateItem(source: ItemSourcePF2e): Promise<void>;
+}

@@ -1,0 +1,102 @@
+import { CreaturePF2e, type FamiliarPF2e } from "@actor";
+import { CreatureUpdateCallbackOptions, ResourceData } from "@actor/creature/types.js";
+import { ActorInitiative } from "@actor/initiative.js";
+import type { AttributeString } from "@actor/types.js";
+import type { AncestryPF2e, BackgroundPF2e, ClassPF2e, DeityPF2e, FeatPF2e, HeritagePF2e, ItemPF2e } from "@item";
+import { WeaponPF2e } from "@item";
+import type { ItemType } from "@item/types.js";
+import { TokenDocumentPF2e } from "@scene/index.js";
+import { RollParameters } from "@system/rolls.js";
+import { Statistic } from "@system/statistic/index.js";
+import { CharacterCrafting } from "./crafting/index.js";
+import { BaseWeaponProficiencyKey, CharacterAbilities, CharacterAttack, CharacterFlags, CharacterSource, CharacterSystemData, WeaponGroupProficiencyKey } from "./data.js";
+import { CharacterFeats } from "./feats/index.js";
+import { CharacterHitPointsSummary, CharacterSkills, GuaranteedGetStatisticSlug } from "./types.js";
+declare class CharacterPF2e<TParent extends TokenDocumentPF2e | null = TokenDocumentPF2e | null> extends CreaturePF2e<TParent> {
+    /** Core singular embeds for PCs */
+    ancestry: AncestryPF2e<this> | null;
+    heritage: HeritagePF2e<this> | null;
+    background: BackgroundPF2e<this> | null;
+    class: ClassPF2e<this> | null;
+    deity: DeityPF2e<this> | null;
+    /** A cached reference to this PC's familiar */
+    familiar: FamiliarPF2e | null;
+    feats: CharacterFeats<this>;
+    pfsBoons: FeatPF2e<this>[];
+    divineIntercessions: FeatPF2e<this>[];
+    /** The primary class DC */
+    classDC: Statistic | null;
+    /** All class DCs, including the primary */
+    classDCs: Record<string, Statistic>;
+    /** Skills for the character, built during data prep */
+    skills: CharacterSkills<this>;
+    initiative: ActorInitiative;
+    crafting: CharacterCrafting;
+    get allowedItemTypes(): (ItemType | "physical")[];
+    get keyAttribute(): AttributeString;
+    /** This PC's ability scores */
+    get abilities(): CharacterAbilities;
+    get handsFree(): number;
+    /** The number of hands this PC "really" has free, ignoring allowances for shields and the Free-Hand trait */
+    get handsReallyFree(): number;
+    get hitPoints(): CharacterHitPointsSummary;
+    get heroPoints(): {
+        value: number;
+        max: number;
+    };
+    /** Retrieve lore skills, class statistics, and tradition-specific spellcasting */
+    getStatistic(slug: GuaranteedGetStatisticSlug): Statistic<this>;
+    getStatistic(slug: string, options?: {
+        item: ItemPF2e | null;
+    }): Statistic<this> | null;
+    protected _initialize(options?: Record<string, unknown>): void;
+    /** If one exists, prepare this character's familiar */
+    prepareData(): void;
+    /** Setup base ephemeral data to be modified by active effects and derived-data preparation */
+    prepareBaseData(): void;
+    /** After AE-likes have been applied, set numeric roll options */
+    prepareEmbeddedDocuments(): void;
+    /**
+     * Immediately after boosts from this PC's ancestry, background, and class have been acquired, set attribute
+     * modifiers according to them.
+     */
+    prepareDataFromItems(): void;
+    /** Determine hands free from held items. */
+    protected prepareHandsData(): void;
+    prepareDerivedData(): void;
+    private prepareBuildData;
+    /** Set roll operations for ability scores, proficiency ranks, and number of hands free */
+    protected setNumericRollOptions(): void;
+    private createArmorStatistic;
+    private prepareSaves;
+    private prepareSkills;
+    prepareMovementData(): void;
+    private prepareFeats;
+    private prepareClassDC;
+    /** Prepare this character's strike actions */
+    prepareAttacks({ includeBasicUnarmed }?: {
+        includeBasicUnarmed?: boolean | undefined;
+    }): CharacterAttack[];
+    private prepareAreaAttack;
+    /** Prepare a strike action from a weapon */
+    private prepareStrike;
+    getStrikeDescription(weapon: WeaponPF2e): {
+        description: string;
+    };
+    consumeAmmo(weapon: WeaponPF2e<CharacterPF2e>, params: RollParameters): boolean;
+    /** Prepare stored and synthetic martial proficiencies */
+    prepareMartialProficiencies(): void;
+    /** Toggle the invested state of an owned magical item */
+    toggleInvested(itemId: string): Promise<boolean>;
+    /** Add a proficiency in a weapon group or base weapon */
+    addAttackProficiency(key: BaseWeaponProficiencyKey | WeaponGroupProficiencyKey): Promise<void>;
+    protected _preUpdate(changed: DeepPartial<this["_source"]>, options: CreatureUpdateCallbackOptions, user: fd.BaseUser): Promise<boolean | void>;
+}
+interface CharacterPF2e<TParent extends TokenDocumentPF2e | null = TokenDocumentPF2e | null> extends CreaturePF2e<TParent> {
+    flags: CharacterFlags;
+    readonly _source: CharacterSource;
+    system: CharacterSystemData;
+    getResource(resource: "hero-points" | "mythic-points" | "focus" | "investiture" | "infused-reagents"): ResourceData;
+    getResource(resource: string): ResourceData | null;
+}
+export { CharacterPF2e };

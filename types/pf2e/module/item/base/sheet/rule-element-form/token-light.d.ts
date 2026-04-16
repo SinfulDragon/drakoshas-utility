@@ -1,0 +1,13 @@
+import type { TokenLightRuleElement, TokenLightRuleSource } from "@module/rules/rule-element/token-light.js";
+import { RuleElementForm, RuleElementFormSheetData, RuleElementFormTabData } from "./base.js";
+declare class TokenLightForm extends RuleElementForm<TokenLightRuleSource, TokenLightRuleElement> {
+    template: string;
+    protected tabs: RuleElementFormTabData;
+    getData(): Promise<TokenLightSheetData>;
+}
+interface TokenLightSheetData extends RuleElementFormSheetData<TokenLightRuleSource, TokenLightRuleElement> {
+    colorationTechniques: typeof fc.rendering.shaders.AdaptiveLightingShader.SHADER_TECHNIQUES;
+    light: TokenLightRuleSource["value"];
+    lightAnimations: Record<string, string>;
+}
+export { TokenLightForm };

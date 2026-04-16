@@ -1,0 +1,158 @@
+import type { ActorPF2e, CharacterPF2e, NPCPF2e } from "@actor";
+import type { ActorUUID, UserUUID } from "@common/documents/_module.d.mts";
+import type { ItemPF2e, PhysicalItemPF2e } from "@item";
+import { SvelteApplicationRenderContext } from "@module/sheet/mixin.svelte.js";
+import type { UserPF2e } from "@module/user/document.js";
+import { localizer } from "@util";
+import MiniSearch from "minisearch";
+declare const TradeDialog_base: (abstract new () => {
+    root: any;
+    $state: object;
+    "__#private@#mount": object;
+    _prepareContext(options: fa.ApplicationRenderOptions): Promise<SvelteApplicationRenderContext>;
+    _renderHTML(context: SvelteApplicationRenderContext): Promise<SvelteApplicationRenderContext>;
+    _replaceHTML(result: SvelteApplicationRenderContext, content: HTMLElement, options: fa.ApplicationRenderOptions): void;
+    _onClose(options: fa.ApplicationClosingOptions): void;
+}) & {
+    DEFAULT_OPTIONS: DeepPartial<fa.ApplicationConfiguration>;
+};
+/** An application to facilitate trading between two creature actors */
+declare class TradeDialog extends TradeDialog_base {
+    #private;
+    constructor({ self, trader, ...options }: ConstructorParams);
+    static DEFAULT_OPTIONS: {
+        tag: string;
+        id: string;
+        window: {
+            icon: string;
+        };
+        position: {
+            width: number;
+        };
+    };
+    /** Reusable localization shorthand function */
+    static localize: (stringId: string, data?: Record<string, Maybe<string | number | boolean>> | undefined) => string;
+    protected root: any;
+    protected $state: TradeDialogState;
+    get title(): string;
+    /** Can the current user trade utilizing the provided trade-initiation data? */
+    static canTrade(args: MaybeTradeInitiationData, { checkReach }?: {
+        checkReach?: boolean | undefined;
+    }): args is TradeRequestData;
+    /** Request a trade via user query. */
+    static requestTrade({ self, trader }: TradeRequestData): Promise<void>;
+    protected _prepareContext(options: fa.ApplicationRenderOptions): Promise<TradeDialogRenderContext>;
+    abortTrade(message: string): Promise<this>;
+    close(options?: TradeDialogClosingOptions): Promise<this>;
+    static handleQuery: (data: TradeQueryData) => Promise<TradeQueryResponse>;
+}
+type TradeActor = CharacterPF2e | NPCPF2e;
+interface MaybeValidConstructorParams extends DeepPartial<fa.ApplicationConfiguration> {
+    self: {
+        actor: ActorPF2e | null;
+        item?: PhysicalItemPF2e | null;
+        gift?: number;
+    };
+    trader: {
+        user: User | null;
+        actor: ActorPF2e | null;
+        item?: PhysicalItemPF2e | null;
+        gift?: number;
+    };
+}
+interface ConstructorParams extends MaybeValidConstructorParams {
+    self: {
+        actor: TradeActor;
+        initiator?: boolean;
+        item?: PhysicalItemPF2e<TradeActor> | null;
+        gift?: number;
+    };
+    trader: {
+        user: UserPF2e;
+        actor: TradeActor;
+        item?: PhysicalItemPF2e<TradeActor> | null;
+        gift?: number;
+    };
+}
+interface TradeItemData extends Pick<PhysicalItemPF2e, "id" | "name" | "img" | "quantity"> {
+    readonly visible: boolean;
+    marked: number;
+    matchScore: number;
+}
+interface MaybeTradeInitiationData {
+    self: {
+        actor?: ActorPF2e | null;
+        item?: ItemPF2e | null;
+        gift?: boolean;
+    };
+    trader: {
+        actor?: ActorPF2e | null;
+        user?: UserPF2e;
+    };
+}
+interface TradeRequestData extends MaybeTradeInitiationData {
+    self: {
+        actor: TradeActor;
+        item?: PhysicalItemPF2e<TradeActor>;
+        gift?: boolean;
+    };
+    trader: {
+        actor: TradeActor;
+        user: UserPF2e;
+    };
+}
+interface TradeDialogState {
+    self: {
+        actor: Pick<ActorPF2e, "id" | "name" | "img">;
+        items: TradeItemData[];
+        accepted: boolean;
+    };
+    trader: {
+        actor: Pick<ActorPF2e, "id" | "name" | "img">;
+        items: TradeItemData[];
+        accepted: boolean;
+    };
+}
+interface TradeDialogRenderContext extends SvelteApplicationRenderContext {
+    foundryApp: TradeDialog;
+    state: TradeDialogState;
+    traderUser: UserPF2e;
+    searchEngine: MiniSearch;
+    localize: ReturnType<typeof localizer>;
+}
+interface QueryResponseOK {
+    ok: true;
+}
+interface QueryResponseNotOK {
+    ok: false;
+    message: string;
+}
+type TradeQueryResponse = QueryResponseOK | QueryResponseNotOK;
+interface RequestQueryData {
+    action: "request";
+    initiator: {
+        user: UserUUID;
+        actor: ActorUUID;
+        item?: string | null;
+        gift?: number;
+    };
+    target: {
+        actor: ActorUUID;
+    };
+}
+interface UpdateQueryData {
+    action: "update";
+    marked?: Record<string, number>;
+    accepted?: boolean;
+}
+interface AbortQueryData {
+    action: "abort";
+    message?: string;
+}
+type TradeQueryData = RequestQueryData | UpdateQueryData | AbortQueryData;
+interface TradeDialogClosingOptions extends fa.ApplicationClosingOptions {
+    aborted?: boolean;
+    success?: boolean;
+}
+export { TradeDialog };
+export type { TradeDialogRenderContext, TradeItemData, TradeQueryData, TradeQueryResponse, TradeRequestData };

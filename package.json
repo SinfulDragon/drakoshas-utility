@@ -8,7 +8,8 @@
     "node": "24.x"
   },
   "scripts": {
-    "sync:pf2e-types": "bash scripts/sync-pf2e-types.sh",
+    "extract:foundry-types": "node scripts/extract-foundry-types.mjs",
+    "extract:pf2e-types": "node scripts/extract-pf2e-types.mjs",
     "clean": "rm -rf dist",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
@@ -24,7 +25,11 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@foundryvtt/foundryvtt-cli": "^3.0.3",
+    "@types/jquery": "^4.0.0",
     "@types/node": "^25.6.0",
+    "@types/sortablejs": "^1.15.9",
+    "@types/tooltipster": "^0.0.35",
+    "@types/yaireo__tagify": "4.17.0",
     "eslint": "^10.2.0",
     "globals": "^17.5.0",
     "pixi.js": "7.4.3",

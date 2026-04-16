@@ -21,3 +21,6 @@ coverage/
 
 # macOS metadata
 .DS_Store
+
+# Cursor
+.cursor/

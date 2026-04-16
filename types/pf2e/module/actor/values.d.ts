@@ -1,0 +1,14 @@
+import type { ImmunityType, ResistanceType, WeaknessType } from "@actor/types.js";
+declare const ATTRIBUTE_ABBREVIATIONS: Set<"str" | "dex" | "con" | "int" | "wis" | "cha">;
+declare const CREATURE_ACTOR_TYPES: readonly ["character", "npc", "familiar"];
+declare const ACTOR_TYPES: readonly ["army", "character", "familiar", "hazard", "loot", "npc", "party", "vehicle"];
+declare const SAVE_TYPES: readonly ["fortitude", "reflex", "will"];
+declare const IMMUNITY_TYPES: Set<ImmunityType>;
+declare const WEAKNESS_TYPES: Set<WeaknessType>;
+declare const RESISTANCE_TYPES: Set<ResistanceType>;
+/** All skill slugs that are part of the core system. Only used in migrations. */
+declare const CORE_SKILL_SLUGS: Set<"athletics" | "deception" | "stealth" | "acrobatics" | "arcana" | "crafting" | "diplomacy" | "intimidation" | "medicine" | "nature" | "occultism" | "performance" | "religion" | "society" | "survival" | "thievery">;
+declare const MOVEMENT_TYPES: readonly ["land", "burrow", "climb", "fly", "swim"];
+/** Actor types that are valid for token size linking */
+declare const SIZE_LINKABLE_ACTOR_TYPES: Set<string>;
+export { ACTOR_TYPES, ATTRIBUTE_ABBREVIATIONS, CORE_SKILL_SLUGS, CREATURE_ACTOR_TYPES, IMMUNITY_TYPES, MOVEMENT_TYPES, RESISTANCE_TYPES, SAVE_TYPES, SIZE_LINKABLE_ACTOR_TYPES, WEAKNESS_TYPES, };

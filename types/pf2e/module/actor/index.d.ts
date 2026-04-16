@@ -1,0 +1,11 @@
+export { ActorPF2e, ActorProxyPF2e } from "./base.js";
+export { CreaturePF2e } from "./creature/document.js";
+export { CharacterPF2e } from "./character/document.js";
+export { FamiliarPF2e } from "./familiar/document.js";
+export { NPCPF2e } from "./npc/document.js";
+export { ArmyPF2e } from "./army/document.js";
+export { HazardPF2e } from "./hazard/document.js";
+export { LootPF2e } from "./loot/document.js";
+export { PartyPF2e } from "./party/document.js";
+export { VehiclePF2e } from "./vehicle/document.js";
+export type { ActorType } from "./types.js";

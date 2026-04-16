@@ -1,0 +1,8 @@
+import { ActorPF2e } from "@actor";
+import { PrototypeTokenPF2e } from "@actor/data/base.js";
+import type { TokenDocumentPF2e } from "@scene";
+/** Check for auras containing newly-placed or moved tokens */
+declare const checkAuras: any;
+/** Returns true if this token has the default actor image or the default image for its actor type */
+declare function isDefaultTokenImage(token: TokenDocumentPF2e | PrototypeTokenPF2e<ActorPF2e>): boolean;
+export { checkAuras, isDefaultTokenImage };

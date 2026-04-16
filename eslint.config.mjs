@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist/**", "vendor/**", "types/foundry/**"]
+    ignores: ["dist/**", "vendor/**", "types/foundry/**", "types/pf2e/**"]
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

@@ -1,0 +1,120 @@
+import type * as ActorInstance from "@actor";
+import type { ActorPF2e } from "@actor";
+import type { Rolled } from "@client/dice/roll.d.mts";
+import type { ImageFilePath, VideoFilePath } from "@common/constants.d.mts";
+import type { ItemPF2e } from "@item";
+import type { EffectTrait } from "@item/abstract-effect/types.js";
+import type { ItemSourcePF2e } from "@item/base/data/index.js";
+import type { ItemInstances } from "@item/types.js";
+import type { RollNotePF2e } from "@module/notes.js";
+import type { ItemAlteration } from "@module/rules/rule-element/item-alteration/alteration.js";
+import type { TokenDocumentPF2e } from "@scene";
+import type { immunityTypes, resistanceTypes, weaknessTypes } from "@scripts/config/iwr.js";
+import type { DamageRoll } from "@system/damage/roll.js";
+import type { DegreeOfSuccessString } from "@system/degree-of-success.js";
+import type { Predicate } from "@system/predication.js";
+import type { ActorSourcePF2e } from "./data/index.js";
+import type { ACTOR_TYPES, ATTRIBUTE_ABBREVIATIONS, CORE_SKILL_SLUGS, MOVEMENT_TYPES, SAVE_TYPES } from "./values.js";
+type ActorType = (typeof ACTOR_TYPES)[number];
+/** Used exclusively to resolve `ActorPF2e#isOfType` */
+interface ActorInstances<TParent extends TokenDocumentPF2e | null> {
+    army: ActorInstance.ArmyPF2e<TParent>;
+    character: ActorInstance.CharacterPF2e<TParent>;
+    creature: ActorInstance.CreaturePF2e<TParent>;
+    familiar: ActorInstance.FamiliarPF2e<TParent>;
+    hazard: ActorInstance.HazardPF2e<TParent>;
+    loot: ActorInstance.LootPF2e<TParent>;
+    party: ActorInstance.PartyPF2e<TParent>;
+    npc: ActorInstance.NPCPF2e<TParent>;
+    vehicle: ActorInstance.VehiclePF2e<TParent>;
+}
+type EmbeddedItemInstances<TParent extends ActorPF2e> = {
+    [K in keyof ItemInstances<TParent>]: ItemInstances<TParent>[K][];
+};
+type AttributeString = SetElement<typeof ATTRIBUTE_ABBREVIATIONS>;
+interface ActorDimensions {
+    length: number;
+    width: number;
+    height: number;
+}
+type SkillSlug = SetElement<typeof CORE_SKILL_SLUGS>;
+type ActorAlliance = "party" | "opposition" | null;
+type SaveType = (typeof SAVE_TYPES)[number];
+type DCSlug = "ac" | "armor" | "perception" | SaveType | SkillSlug;
+type MovementType = (typeof MOVEMENT_TYPES)[number];
+interface AuraData {
+    slug: string;
+    level: number | null;
+    radius: number;
+    traits: EffectTrait[];
+    effects: AuraEffectData[];
+    appearance: AuraAppearanceData;
+}
+interface AuraEffectData {
+    uuid: string;
+    parent: ItemPF2e;
+    affects: "allies" | "enemies" | "all";
+    events: ("enter" | "turn-start" | "turn-end")[];
+    save: {
+        type: SaveType;
+        dc: number;
+    } | null;
+    predicate: Predicate;
+    removeOnExit: boolean;
+    includesSelf: boolean;
+    alterations: ItemAlteration[];
+}
+interface AuraAppearanceData {
+    border: {
+        color: number;
+        alpha: number;
+    } | null;
+    highlight: {
+        color: number;
+        alpha: number;
+    };
+    texture: {
+        src: ImageFilePath | VideoFilePath;
+        alpha: number;
+        scale: number;
+        translation: {
+            x: number;
+            y: number;
+        } | null;
+        loop: boolean;
+        playbackRate: number;
+    } | null;
+}
+interface ActorGroupUpdate {
+    actorUpdates: DeepPartial<ActorSourcePF2e> & Record<string, unknown>;
+    itemCreates: PreCreate<ItemSourcePF2e>[];
+    itemUpdates: EmbeddedDocumentUpdateData[];
+    itemDeletes: string[];
+}
+interface ActorRechargeData extends ActorGroupUpdate {
+    affected: {
+        frequencies: boolean;
+        spellSlots: boolean;
+        resources: string[];
+    };
+}
+interface ApplyDamageParams {
+    damage: number | Rolled<DamageRoll>;
+    token: TokenDocumentPF2e;
+    /** The item used in the damaging action */
+    item?: ItemPF2e<ActorPF2e> | null;
+    skipIWR?: boolean;
+    /** Predicate statements from the damage roll */
+    rollOptions?: Set<string>;
+    shieldBlockRequest?: boolean;
+    breakdown?: string[];
+    outcome?: DegreeOfSuccessString | null;
+    notes?: RollNotePF2e[];
+    /** Whether to treat to not adjust the damage any further. Skips IWR regardless of its setting if set */
+    final?: boolean;
+}
+type ImmunityType = keyof typeof immunityTypes;
+type WeaknessType = keyof typeof weaknessTypes;
+type ResistanceType = keyof typeof resistanceTypes;
+type IWRType = ImmunityType | WeaknessType | ResistanceType;
+export type { ActorAlliance, ActorDimensions, ActorGroupUpdate, ActorInstances, ActorRechargeData, ActorType, ApplyDamageParams, AttributeString, AuraAppearanceData, AuraData, AuraEffectData, DCSlug, EmbeddedItemInstances, ImmunityType, IWRType, MovementType, ResistanceType, SaveType, SkillSlug, WeaknessType, };
