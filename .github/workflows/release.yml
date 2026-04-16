@@ -11,6 +11,9 @@ jobs:
   release:
     name: Build & publish release
     runs-on: ubuntu-latest
+    env:
+      # Actions (checkout, pnpm/setup) still bundle Node 20 until default flips; opt into 24 early.
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
@@ -18,8 +21,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
