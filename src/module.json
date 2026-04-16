@@ -1,7 +1,7 @@
 {
   "id": "drakoshas-utility",
   "title": "Drakosha's Utility",
-  "description": "Utility module for Foundry Virtual Tabletop with PF2E support.",
+  "description": "Utility module for PF2E system.",
   "version": "1.0.0",
   "authors": [
     {
@@ -23,6 +23,13 @@
           "verified": "7.12.2"
         }
       }
+    ],
+    "requires": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://github.com/farling42/foundryvtt-socketlib/releases/latest/download/module.json"
+      }
     ]
   },
   "url": "https://github.com/SinfulDragon/drakoshas-utility",
@@ -30,6 +37,19 @@
   "download": "https://github.com/SinfulDragon/drakoshas-utility/releases/latest/download/module.zip",
   "esmodules": ["scripts/index.js"],
   "styles": ["styles/module.css"],
+  "socket": true,
+  "packs": [
+    {
+      "name": "macros",
+      "label": "Drakosha's Macros",
+      "path": "packs/macros",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
   "languages": [
     {
       "lang": "en",

@@ -1,0 +1,16 @@
+_id: drakoshaHarrow01
+_key: "!macros!drakoshaHarrow01"
+name: Harrowing
+type: script
+scope: global
+img: icons/sundries/gaming/playing-cards-grey.webp
+command: |
+  const mod = game.modules.get("drakoshas-utility");
+  if (!mod?.api?.runHarrowing) {
+    ui.notifications.error(game.i18n.localize("DRAKOSHAS_UTILITY.Macro.NotActivated"));
+    return;
+  }
+  await mod.api.runHarrowing();
+ownership:
+  default: 2
+flags: {}

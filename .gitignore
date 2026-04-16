@@ -3,6 +3,7 @@ dist/
 vendor/
 .fvtt-cli/
 .pnpm-store/
+tmp/
 
 # Node logs
 *.log

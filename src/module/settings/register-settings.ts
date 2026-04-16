@@ -1,5 +1,5 @@
-import { moduleId } from "../helpers.ts";
+import { Logger } from "../logger.ts";
 
 export function registerSettings(): void {
-  console.log(`${moduleId()} - Registering settings`);
+  Logger.info("Registering settings");
 }

@@ -1,6 +1,22 @@
 import { resolve } from "node:path";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
+
+function packsPlugin(): Plugin {
+  return {
+    name: "drakoshas-utility:build-packs",
+    apply: "build",
+    async closeBundle() {
+      try {
+        // @ts-expect-error - .mjs script has no TS declaration
+        const mod: { buildPacks: () => Promise<void> } = await import("./scripts/build-packs.mjs");
+        await mod.buildPacks();
+      } catch (err) {
+        this.error(err instanceof Error ? err : new Error(String(err)));
+      }
+    },
+  };
+}
 
 export default defineConfig({
   build: {
@@ -33,7 +49,8 @@ export default defineConfig({
         { src: "src/module.json", dest: ".", rename: { stripBase: true } },
         { src: "src/lang/*.json", dest: "lang", rename: { stripBase: true } }
       ]
-    })
+    }),
+    packsPlugin()
   ],
   css: {
     preprocessorOptions: {

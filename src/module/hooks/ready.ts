@@ -1,5 +1,7 @@
+import { Logger } from "../logger.ts";
+
 export function registerReadyHook(): void {
   Hooks.once("ready", () => {
-    console.log("Ready hook triggered");
+    Logger.info("Ready hook triggered");
   });
 }

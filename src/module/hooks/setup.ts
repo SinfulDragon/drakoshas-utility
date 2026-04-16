@@ -1,5 +1,9 @@
+import { exposeApi } from "../api.ts";
+import { Logger } from "../logger.ts";
+
 export function registerSetupHook(): void {
   Hooks.once("setup", () => {
-    console.log("Setup hook triggered");
+    Logger.info("Setup hook triggered");
+    exposeApi();
   });
 }
