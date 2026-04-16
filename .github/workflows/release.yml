@@ -11,9 +11,6 @@ jobs:
   release:
     name: Build & publish release
     runs-on: ubuntu-latest
-    env:
-      # Actions (checkout, pnpm/setup) still bundle Node 20 until default flips; opt into 24 early.
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
@@ -40,7 +37,7 @@ jobs:
 
       # Bump version in package.json without creating a git commit/tag
       - name: Bump package.json version
-        run: npm version "${{ steps.version.outputs.value }}" --no-git-tag-version
+        run: npm version "${{ steps.version.outputs.value }}" --no-git-tag-version --allow-same-version
 
       # Write version + download/manifest URLs into src/module.json
       - name: Sync version to module.json
