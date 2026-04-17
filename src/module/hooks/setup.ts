@@ -1,5 +1,5 @@
 import { exposeApi } from "../api.ts";
-import { Logger } from "../logger.ts";
+import { Logger } from "@/module/logger.ts";
 
 export function registerSetupHook(): void {
   Hooks.once("setup", () => {

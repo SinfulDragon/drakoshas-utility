@@ -1,6 +1,6 @@
 import { moduleId } from "./helpers.ts";
-import { runHarrowing } from "./harrowing/orchestrate.ts";
-import { Logger } from "./logger.ts";
+import { runHarrowing } from "./automations/harrowing/orchestrate.ts";
+import { Logger } from "@/module/logger.ts";
 
 export interface DrakoshaModuleApi {
   runHarrowing: typeof runHarrowing;

@@ -38,5 +38,6 @@
   "DRAKOSHAS_UTILITY.Harrowing.Effect.SourceLabel": "Source",
   "DRAKOSHAS_UTILITY.Harrowing.Effect.RankLabel": "Effect rank",
   "DRAKOSHAS_UTILITY.Harrowing.Effect.Description": "<p>The creature may reroll any related check it has made, gaining a +4 status bonus to the reroll if the ritual was a critical success. If the ritual failed, it takes a -4 status penalty.</p><p><strong>{degreeLabel}:</strong> {degreeName}</p><p><strong>{checksLabel}:</strong> {checks}</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
-  "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>The target is immune to further Harrowing divinations for a month.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>"
+  "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>The target is immune to further Harrowing divinations for a month.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
+  "DRAKOSHAS_UTILITY.RuleElement.Harrower.ExperiencedHarrower": "Experienced Harrower"
 }

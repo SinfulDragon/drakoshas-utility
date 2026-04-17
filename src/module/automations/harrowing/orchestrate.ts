@@ -1,11 +1,11 @@
 import type { ActorPF2e, CreaturePF2e } from "@actor";
 import type { EffectPF2e } from "@item";
 
-import { Logger } from "../logger.ts";
-import { getRitualDC } from "../pf2e/dc.ts";
-import { getMaxRitualRank } from "../pf2e/ritual.ts";
-import { pickHarrowingSkill } from "../pf2e/skill-selection.ts";
-import { getSocket } from "../socket/index.ts";
+import { Logger } from "@/module/logger.ts";
+import { getRitualDC } from "../../pf2e/dc.ts";
+import { getMaxRitualRank } from "../../pf2e/ritual.ts";
+import { pickHarrowingSkill } from "../../pf2e/skill-selection.ts";
+import { getSocket } from "../../socket/index.ts";
 import { askRitualOptions } from "./dialog.ts";
 import { buildHarrowingEffectSource, buildHarrowingImmunitySource } from "./effects.ts";
 import { SUIT_MAP } from "./suits.ts";

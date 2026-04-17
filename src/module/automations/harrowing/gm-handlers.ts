@@ -2,7 +2,7 @@ import type { ActorPF2e } from "@actor";
 import type { EffectSource } from "@item/effect/data.ts";
 import type { TokenDocumentPF2e } from "@scene";
 
-import { Logger } from "../logger.ts";
+import { Logger } from "@/module/logger.ts";
 
 async function resolveActor(uuid: string): Promise<ActorPF2e | null> {
   const doc = await fromUuid(uuid);

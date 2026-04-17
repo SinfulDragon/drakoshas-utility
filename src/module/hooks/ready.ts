@@ -1,4 +1,4 @@
-import { Logger } from "../logger.ts";
+import { Logger } from "@/module/logger.ts";
 
 export function registerReadyHook(): void {
   Hooks.once("ready", () => {

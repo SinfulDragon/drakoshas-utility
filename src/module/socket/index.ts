@@ -1,7 +1,7 @@
 import type { EffectSource } from "@item/effect/data.ts";
 
 import { moduleId } from "../helpers.ts";
-import { Logger } from "../logger.ts";
+import { Logger } from "@/module/logger.ts";
 
 export type HarrowingHandler = (
   targetUuid: string,

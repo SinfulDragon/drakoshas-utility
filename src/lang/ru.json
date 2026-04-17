@@ -38,5 +38,6 @@
   "DRAKOSHAS_UTILITY.Harrowing.Effect.SourceLabel": "Источник",
   "DRAKOSHAS_UTILITY.Harrowing.Effect.RankLabel": "Ранг эффекта",
   "DRAKOSHAS_UTILITY.Harrowing.Effect.Description": "<p>Существо может перебросить любую связанную проверку, которую оно сделало, получая бонус состояния +4 к перебросу, если ритуал был критическим успехом. Если ритуал окончился провалом, оно получает штраф состояния −4.</p><p><strong>{degreeLabel}:</strong> {degreeName}</p><p><strong>{checksLabel}:</strong> {checks}</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
-  "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>Цель иммунна на месяц к дальнейшим гаданиям харро.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>"
+  "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>Цель иммунна на месяц к дальнейшим гаданиям харро.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
+  "DRAKOSHAS_UTILITY.RuleElement.Harrower.ExperiencedHarrower": "Опытный гадатель"
 }
