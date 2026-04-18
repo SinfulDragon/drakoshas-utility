@@ -53,16 +53,30 @@ function resolveSlug(document: ItemPF2e<ActorPF2e | null>): string | null {
  * (or importing an already-patched item) does not stack duplicates.
  */
 export function registerPreCreateItemHook(): void {
-  onPreCreateItem((document, data) => {
-    if (!document.actor) return;
+  Logger.debug("Registering preCreateItem hook");
 
+  onPreCreateItem((document, data) => {
     const slug = resolveSlug(document);
+    const compendiumSource = getCompendiumSource(document, data);
+
+    Logger.debug(
+      `preCreateItem fired: name="${document.name}", type=${document.type}, slug=${slug ?? "∅"}, actor=${document.actor?.name ?? "∅"}, compendiumSource=${compendiumSource ?? "∅"}`,
+    );
+
+    if (!document.actor) {
+      Logger.debug("preCreateItem: no actor (world/sidebar item), skipping patch injection");
+      return;
+    }
+
     const patches = findRuleElementPatches({
       slug,
       itemType: document.type,
-      compendiumSource: getCompendiumSource(document, data),
+      compendiumSource,
     });
-    if (patches.length === 0) return;
+    if (patches.length === 0) {
+      Logger.debug(`preCreateItem: no patches for slug=${slug ?? "∅"}, skipping`);
+      return;
+    }
 
     const existingRules: RuleElementSource[] = [...(document.system?.rules ?? [])];
     const existingSlugs = new Set(
@@ -71,18 +85,36 @@ export function registerPreCreateItemHook(): void {
         .filter((s): s is string => s !== null),
     );
 
+    Logger.debug(
+      `preCreateItem: existing rules=${existingRules.length}, existing slugs=[${[...existingSlugs].join(", ")}]`,
+    );
+
     const additions: RuleElementSourcePatch[] = [];
     for (const patch of patches) {
       for (const rule of patch.rules) {
         const ruleSlug = typeof rule.slug === "string" ? rule.slug : null;
-        if (ruleSlug && existingSlugs.has(ruleSlug)) continue;
+        if (ruleSlug && existingSlugs.has(ruleSlug)) {
+          Logger.debug(
+            `preCreateItem: skip duplicate rule slug="${ruleSlug}" from patch "${patch.slug}"`,
+          );
+          continue;
+        }
         if (ruleSlug) existingSlugs.add(ruleSlug);
+        Logger.debug(
+          `preCreateItem: will add rule key=${String(rule.key)}, slug=${ruleSlug ?? "∅"} (from patch "${patch.slug}")`,
+        );
         additions.push(rule);
       }
     }
-    if (additions.length === 0) return;
+    if (additions.length === 0) {
+      Logger.debug("preCreateItem: all patch rules already present, no updates");
+      return;
+    }
 
     const mergedRules = [...existingRules, ...additions] as RuleElementSource[];
+    Logger.debug(
+      `preCreateItem: updateSource system.rules (${existingRules.length} -> ${mergedRules.length})`,
+    );
     document.updateSource({ "system.rules": mergedRules });
 
     Logger.info(

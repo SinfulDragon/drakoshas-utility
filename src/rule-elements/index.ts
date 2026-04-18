@@ -1,3 +1,4 @@
+import { Logger } from "@/module/logger.ts";
 import { harrowerArchetypePatches } from "./feats/archetype/harrower/index.ts";
 import type { RuleElementPatch } from "./types.ts";
 
@@ -23,9 +24,17 @@ export function findRuleElementPatches(
   options: FindRuleElementPatchesOptions,
 ): RuleElementPatch[] {
   const { slug, itemType, compendiumSource } = options;
-  if (!slug) return [];
 
-  return ALL_PATCHES.filter((patch) => {
+  Logger.debug(
+    `findRuleElementPatches: slug=${slug ?? "∅"}, itemType=${itemType}, compendiumSource=${compendiumSource ?? "∅"}, totalPatches=${ALL_PATCHES.length}`,
+  );
+
+  if (!slug) {
+    Logger.debug("findRuleElementPatches: empty slug, skipping");
+    return [];
+  }
+
+  const matches = ALL_PATCHES.filter((patch) => {
     if (patch.itemType !== itemType) return false;
     if (patch.slug !== slug) return false;
     if (patch.compendiumSource && patch.compendiumSource !== compendiumSource) {
@@ -33,4 +42,13 @@ export function findRuleElementPatches(
     }
     return true;
   });
+
+  Logger.debug(
+    `findRuleElementPatches: matched ${matches.length} patch(es)` +
+      (matches.length > 0
+        ? ` -> [${matches.map((p) => p.slug).join(", ")}]`
+        : ""),
+  );
+
+  return matches;
 }

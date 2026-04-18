@@ -40,6 +40,7 @@ function format(key: string, data: Record<string, string | number>): string {
 }
 
 export async function runHarrowing(): Promise<void> {
+  Logger.debug("runHarrowing: start");
   const controlled = canvas.tokens?.controlled ?? [];
   const casterToken = controlled[0];
   if (!casterToken) return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectCaster"));
@@ -62,14 +63,25 @@ export async function runHarrowing(): Promise<void> {
     return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.NotCreature"));
   }
 
+  Logger.debug(
+    `runHarrowing: caster=${caster.name} (id=${caster.id}), target=${target.name} (uuid=${target.uuid})`,
+  );
+
   const maxRank = getMaxRitualRank(creatureCaster);
+  Logger.debug(`runHarrowing: maxRitualRank=${maxRank}`);
   const ritualOptions = await askRitualOptions(maxRank);
-  if (!ritualOptions) return;
+  if (!ritualOptions) {
+    Logger.debug("runHarrowing: dialog cancelled");
+    return;
+  }
 
   const ritualRank = ritualOptions.ritualRank;
   const ritualDC = ritualOptions.ritualDCOverride === ""
     ? getRitualDC(ritualRank)
     : Number(ritualOptions.ritualDCOverride);
+  Logger.debug(
+    `runHarrowing: ritualRank=${ritualRank}, ritualDC=${ritualDC} (override="${ritualOptions.ritualDCOverride}")`,
+  );
 
   if (!Number.isFinite(ritualDC) || ritualDC < 0) {
     return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.InvalidDC"));
@@ -81,6 +93,7 @@ export async function runHarrowing(): Promise<void> {
   }
 
   const { skill: chosen, label: skillLabel } = selection;
+  Logger.debug(`runHarrowing: picked skill="${skillLabel}"`);
 
   const effects: EffectPF2e<ActorPF2e>[] = target.itemTypes.effect ?? [];
   const immuneEffect = effects.find((e) => {
@@ -106,6 +119,9 @@ export async function runHarrowing(): Promise<void> {
       `harrowing-card:${i}`,
       `harrowing-rank:${ritualRank}`,
     ];
+    Logger.debug(
+      `runHarrowing: card ${i}/${ritualRank} rolling check, DC=${ritualDC}, rollOptions=[${rollOptions.join(", ")}]`,
+    );
 
     const roll = await chosen.check.roll({
       dc: { value: ritualDC },
@@ -119,6 +135,9 @@ export async function runHarrowing(): Promise<void> {
     }
 
     const degree = roll.degreeOfSuccess ?? 0;
+    Logger.debug(
+      `runHarrowing: card ${i} rollTotal=${roll.total}, degreeOfSuccess=${degree}`,
+    );
 
     if (degree === 0) {
       const immunitySource = buildHarrowingImmunitySource({ caster: casterRef, ritualRank });
@@ -145,6 +164,9 @@ export async function runHarrowing(): Promise<void> {
       error(format("DRAKOSHAS_UTILITY.Harrowing.Error.SuitUnknown", { card: i }));
       break;
     }
+    Logger.debug(
+      `runHarrowing: card ${i} suitRoll=${suitRoll.total} -> suit key="${suit.labelKey}"`,
+    );
 
     const effectSource = buildHarrowingEffectSource({
       caster: casterRef,

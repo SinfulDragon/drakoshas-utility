@@ -24,5 +24,6 @@ export function exposeApi(): DrakoshaModuleApi {
 
   mod.api = api;
   Logger.info("API exposed on module.api");
+  Logger.debug(`API exposed fields: [${Object.keys(api).join(", ")}]`);
   return api;
 }

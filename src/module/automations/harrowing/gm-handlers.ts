@@ -21,18 +21,22 @@ export async function applyHarrowingEffect(
   uuid: string,
   source: PreCreate<EffectSource>,
 ): Promise<void> {
-  Logger.info(`applyHarrowingEffect -> ${uuid}`);
+  Logger.debug(`applyHarrowingEffect: uuid=${uuid}, effect="${source?.name ?? "∅"}"`);
   const actor = await resolveActor(uuid);
   if (!actor) throw actorNotFound(uuid);
+  Logger.debug(`applyHarrowingEffect: resolved actor="${actor.name}" (id=${actor.id})`);
   await actor.createEmbeddedDocuments("Item", [source]);
+  Logger.debug(`applyHarrowingEffect: effect created on "${actor.name}"`);
 }
 
 export async function applyHarrowingImmunity(
   uuid: string,
   source: PreCreate<EffectSource>,
 ): Promise<void> {
-  Logger.info(`applyHarrowingImmunity -> ${uuid}`);
+  Logger.debug(`applyHarrowingImmunity: uuid=${uuid}, effect="${source?.name ?? "∅"}"`);
   const actor = await resolveActor(uuid);
   if (!actor) throw actorNotFound(uuid);
+  Logger.debug(`applyHarrowingImmunity: resolved actor="${actor.name}" (id=${actor.id})`);
   await actor.createEmbeddedDocuments("Item", [source]);
+  Logger.debug(`applyHarrowingImmunity: immunity created on "${actor.name}"`);
 }

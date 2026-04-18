@@ -16,10 +16,14 @@ export interface HarrowingHandlers {
 let socket: SocketlibSocket | null = null;
 
 export function registerSocketlibHook(handlers: HarrowingHandlers): void {
+  Logger.debug("registerSocketlibHook: attaching socketlib.ready handler");
+
   Hooks.once("socketlib.ready", () => {
+    Logger.debug("socketlib.ready hook: start");
     socket = socketlib.registerModule(moduleId());
     socket.register("applyEffect", handlers.applyEffect as (...args: never[]) => unknown);
     socket.register("applyImmunity", handlers.applyImmunity as (...args: never[]) => unknown);
+    Logger.debug("socketlib handlers registered: [applyEffect, applyImmunity]");
     Logger.info("socketlib module registered");
   });
 }
