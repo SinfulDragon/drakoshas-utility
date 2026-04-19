@@ -1,0 +1,16 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/drakoshas-utility:cached
+      # Foundry Data folder — path comes from FOUNDRY_DATA_PATH in .env
+      # If not set, falls back to a temp dir (container starts without linking)
+      - ${FOUNDRY_DATA_PATH:-/tmp/foundry-data-not-configured}:/foundry-data:cached
+    environment:
+      # Always /foundry-data inside the container regardless of host path
+      - FOUNDRY_DATA_PATH=/foundry-data
+      - PATH=/usr/local/share/npm-global/bin:/usr/local/bin:/usr/bin:/bin
+    command: sleep infinity
+    user: node

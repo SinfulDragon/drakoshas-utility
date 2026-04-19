@@ -20,11 +20,10 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-const PF2E_REPO_URL =
-  process.env.PF2E_REPO_URL ?? "https://github.com/foundryvtt/pf2e.git";
-const PF2E_REF = process.env.PF2E_REF ?? "v13-dev";
-const VENDOR_DIR = resolve(ROOT, process.env.VENDOR_DIR ?? "vendor/pf2e");
-const TARGET_DIR = resolve(ROOT, process.env.TARGET_DIR ?? "types/foundry");
+const PF2E_REPO_URL = "https://github.com/foundryvtt/pf2e.git";
+const PF2E_REF = "v13-dev";
+const VENDOR_DIR = resolve(ROOT, "vendor/pf2e");
+const TARGET_DIR = resolve(ROOT, "types/foundry");
 const VENDOR_FOUNDRY_DIR = resolve(VENDOR_DIR, "types/foundry");
 
 // ---------------------------------------------------------------------------

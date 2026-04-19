@@ -4,6 +4,7 @@ vendor/
 .fvtt-cli/
 .pnpm-store/
 tmp/
+opencode.json
 
 # Node logs
 *.log

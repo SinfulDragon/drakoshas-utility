@@ -1,4 +1,7 @@
-import { applyHarrowingEffect, applyHarrowingImmunity } from "../automations/harrowing/gm-handlers.ts";
+import {
+  applyHarrowingEffect,
+  applyHarrowingImmunity
+} from "../automations/harrowing/gm-handlers.ts";
 import { Logger } from "@/module/logger.ts";
 import { registerSettings } from "../settings/register-settings.ts";
 import { registerSocketlibHook } from "../socket/index.ts";
@@ -16,6 +19,6 @@ export function registerInitHook(): void {
 
   registerSocketlibHook({
     applyEffect: applyHarrowingEffect,
-    applyImmunity: applyHarrowingImmunity,
+    applyImmunity: applyHarrowingImmunity
   });
 }

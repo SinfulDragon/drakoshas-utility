@@ -1,18 +1,19 @@
 {
   "name": "Drakosha's Utility",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
   "remoteUser": "node",
   "workspaceFolder": "/workspaces/drakoshas-utility",
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postCreateCommand": "git config --global --add safe.directory /workspaces/drakoshas-utility && bash .devcontainer/post-create.sh",
+
   "customizations": {
     "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "vitest.explorer"
-      ]
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"],
+      "settings": {
+        "js/ts.tsdk.path": "node_modules/typescript/lib",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
     }
   }
 }
