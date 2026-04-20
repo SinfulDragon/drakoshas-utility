@@ -4,7 +4,7 @@ import { Logger } from "@/module/logger.ts";
 const DEBUG_LOGGING_KEY = "debugLogging";
 
 export function registerSettings(): void {
-  Logger.info("Registering settings");
+  Logger.debug("Registering settings");
 
   game.settings.register(moduleId(), DEBUG_LOGGING_KEY, {
     name: "DRAKOSHAS_UTILITY.Settings.DebugLogging.Name",
@@ -17,10 +17,12 @@ export function registerSettings(): void {
       const enabled = Boolean(value);
       Logger.setDebugEnabled(enabled);
       Logger.info(`Debug logging ${enabled ? "enabled" : "disabled"}`);
-    },
+    }
   });
 
-  const initial = Boolean(game.settings.get(moduleId(), DEBUG_LOGGING_KEY));
-  Logger.setDebugEnabled(initial);
-  Logger.debug(`Settings registered; initial debugLogging=${initial}`);
+  const initialValue = game.settings.get(
+    moduleId(),
+    DEBUG_LOGGING_KEY
+  ) as boolean;
+  Logger.setDebugEnabled(initialValue);
 }

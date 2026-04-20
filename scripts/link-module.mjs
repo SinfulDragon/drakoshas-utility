@@ -25,5 +25,6 @@ if (fs.existsSync(targetPath)) {
   fs.rmSync(targetPath, { recursive: true, force: true });
 }
 
-fs.symlinkSync(distPath, targetPath, process.platform === "win32" ? "junction" : "dir");
-console.log(`Linked ${distPath} -> ${targetPath}`);
+fs.mkdirSync(targetPath, { recursive: true });
+fs.cpSync(distPath, targetPath, { recursive: true, force: true });
+console.log(`Copied ${distPath} -> ${targetPath}`);

@@ -16,19 +16,19 @@ export class Logger {
   }
 
   static info(...args: unknown[]): void {
-    console.log(Logger.prefix(), ...args);
+    console.log(Logger.prefix(), "[INFO]", ...args);
   }
 
   static warn(...args: unknown[]): void {
-    console.warn(Logger.prefix(), ...args);
+    console.warn(Logger.prefix(), "[WARN]", ...args);
   }
 
   static error(...args: unknown[]): void {
-    console.error(Logger.prefix(), ...args);
+    console.error(Logger.prefix(), "[ERROR]", ...args);
   }
 
   static debug(...args: unknown[]): void {
     if (!Logger.debugEnabled) return;
-    console.debug(Logger.prefix(), ...args);
+    console.debug(Logger.prefix(), "[DEBUG]", ...args);
   }
 }

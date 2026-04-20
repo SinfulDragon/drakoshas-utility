@@ -169,8 +169,11 @@ for this project's Foundry v13.351 + pf2e 7.12.2 target.
 
 ### Consult Context7 for API References
 
-When working with FoundryVTT API use Context7 to look up accurate documentation and type signatures.
-Do not guess API shapes.
+You have access to the Context7 remote MCP server, which provides up-to-date documentation and code examples for libraries and frameworks.
+
+1. **Documentation First**: Before writing code or answering questions about any third-party library, API, or framework, ALWAYS use the Context7 MCP to fetch the latest documentation and best practices. Do not rely solely on your baseline knowledge.
+2. **Skill Management**: You have permission to manage Context7 skills directly. If a required skill is missing, you must execute the appropriate Context7 CLI commands in the terminal using `npx ctx7 skills install <skill_name>`.
+3. **Execution**: When using `npx ctx7 skills` commands, execute them directly in the environment. Printing commands without execution is forbidden.
 
 ### PF2e Rule Elements
 

@@ -5,7 +5,7 @@ import { Logger } from "@/module/logger.ts";
 
 export type HarrowingHandler = (
   targetUuid: string,
-  source: PreCreate<EffectSource>,
+  source: PreCreate<EffectSource>
 ) => Promise<void>;
 
 export interface HarrowingHandlers {
@@ -21,8 +21,14 @@ export function registerSocketlibHook(handlers: HarrowingHandlers): void {
   Hooks.once("socketlib.ready", () => {
     Logger.debug("socketlib.ready hook: start");
     socket = socketlib.registerModule(moduleId());
-    socket.register("applyEffect", handlers.applyEffect as (...args: never[]) => unknown);
-    socket.register("applyImmunity", handlers.applyImmunity as (...args: never[]) => unknown);
+    socket.register(
+      "applyEffect",
+      handlers.applyEffect as (...args: never[]) => unknown
+    );
+    socket.register(
+      "applyImmunity",
+      handlers.applyImmunity as (...args: never[]) => unknown
+    );
     Logger.debug("socketlib handlers registered: [applyEffect, applyImmunity]");
     Logger.info("socketlib module registered");
   });

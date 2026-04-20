@@ -7,7 +7,10 @@ import { getMaxRitualRank } from "../../pf2e/ritual.ts";
 import { pickHarrowingSkill } from "../../pf2e/skill-selection.ts";
 import { getSocket } from "../../socket/index.ts";
 import { askRitualOptions } from "./dialog.ts";
-import { buildHarrowingEffectSource, buildHarrowingImmunitySource } from "./effects.ts";
+import {
+  buildHarrowingEffectSource,
+  buildHarrowingImmunitySource
+} from "./effects.ts";
 import { SUIT_MAP } from "./suits.ts";
 import type { HarrowingCasterRef } from "./types.ts";
 
@@ -43,7 +46,8 @@ export async function runHarrowing(): Promise<void> {
   Logger.debug("runHarrowing: start");
   const controlled = canvas.tokens?.controlled ?? [];
   const casterToken = controlled[0];
-  if (!casterToken) return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectCaster"));
+  if (!casterToken)
+    return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectCaster"));
   if (controlled.length > 1) {
     return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.OnlyOneCaster"));
   }
@@ -56,7 +60,9 @@ export async function runHarrowing(): Promise<void> {
   const target = targetToken?.actor ?? null;
 
   if (!caster || !target) {
-    return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.ActorsUnresolved"));
+    return error(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Error.ActorsUnresolved")
+    );
   }
   const creatureCaster = asCreature(caster);
   if (!creatureCaster) {
@@ -64,7 +70,7 @@ export async function runHarrowing(): Promise<void> {
   }
 
   Logger.debug(
-    `runHarrowing: caster=${caster.name} (id=${caster.id}), target=${target.name} (uuid=${target.uuid})`,
+    `runHarrowing: caster=${caster.name} (id=${caster.id}), target=${target.name} (uuid=${target.uuid})`
   );
 
   const maxRank = getMaxRitualRank(creatureCaster);
@@ -76,11 +82,12 @@ export async function runHarrowing(): Promise<void> {
   }
 
   const ritualRank = ritualOptions.ritualRank;
-  const ritualDC = ritualOptions.ritualDCOverride === ""
-    ? getRitualDC(ritualRank)
-    : Number(ritualOptions.ritualDCOverride);
+  const ritualDC =
+    ritualOptions.ritualDCOverride === ""
+      ? getRitualDC(ritualRank)
+      : Number(ritualOptions.ritualDCOverride);
   Logger.debug(
-    `runHarrowing: ritualRank=${ritualRank}, ritualDC=${ritualDC} (override="${ritualOptions.ritualDCOverride}")`,
+    `runHarrowing: ritualRank=${ritualRank}, ritualDC=${ritualDC} (override="${ritualOptions.ritualDCOverride}")`
   );
 
   if (!Number.isFinite(ritualDC) || ritualDC < 0) {
@@ -89,7 +96,9 @@ export async function runHarrowing(): Promise<void> {
 
   const selection = pickHarrowingSkill(creatureCaster);
   if (!selection) {
-    return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.InsufficientSkill"));
+    return error(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Error.InsufficientSkill")
+    );
   }
 
   const { skill: chosen, label: skillLabel } = selection;
@@ -117,37 +126,42 @@ export async function runHarrowing(): Promise<void> {
       "action:harrowing",
       "harrowing-primary-check",
       `harrowing-card:${i}`,
-      `harrowing-rank:${ritualRank}`,
+      `harrowing-rank:${ritualRank}`
     ];
     Logger.debug(
-      `runHarrowing: card ${i}/${ritualRank} rolling check, DC=${ritualDC}, rollOptions=[${rollOptions.join(", ")}]`,
+      `runHarrowing: card ${i}/${ritualRank} rolling check, DC=${ritualDC}, rollOptions=[${rollOptions.join(", ")}]`
     );
 
     const roll = await chosen.check.roll({
       dc: { value: ritualDC },
       extraRollOptions: rollOptions,
-      createMessage: true,
+      createMessage: true
     });
 
     if (!roll) {
-      error(format("DRAKOSHAS_UTILITY.Harrowing.Error.RollFailed", { card: i }));
+      error(
+        format("DRAKOSHAS_UTILITY.Harrowing.Error.RollFailed", { card: i })
+      );
       break;
     }
 
     const degree = roll.degreeOfSuccess ?? 0;
     Logger.debug(
-      `runHarrowing: card ${i} rollTotal=${roll.total}, degreeOfSuccess=${degree}`,
+      `runHarrowing: card ${i} rollTotal=${roll.total}, degreeOfSuccess=${degree}`
     );
 
     if (degree === 0) {
-      const immunitySource = buildHarrowingImmunitySource({ caster: casterRef, ritualRank });
+      const immunitySource = buildHarrowingImmunitySource({
+        caster: casterRef,
+        ritualRank
+      });
       try {
         await socket.executeAsGM("applyImmunity", targetUuid, immunitySource);
       } catch (err) {
         error(
           format("DRAKOSHAS_UTILITY.Harrowing.Error.ImmunityFailed", {
-            message: (err as Error).message,
-          }),
+            message: (err as Error).message
+          })
         );
       }
       interruptedByCriticalFailure = true;
@@ -156,16 +170,18 @@ export async function runHarrowing(): Promise<void> {
 
     const suitRoll = await new Roll("1d6").evaluate();
     await suitRoll.toMessage({
-      flavor: format("DRAKOSHAS_UTILITY.Harrowing.Roll.SuitFlavor", { card: i }),
+      flavor: format("DRAKOSHAS_UTILITY.Harrowing.Roll.SuitFlavor", { card: i })
     });
 
     const suit = SUIT_MAP[suitRoll.total];
     if (!suit) {
-      error(format("DRAKOSHAS_UTILITY.Harrowing.Error.SuitUnknown", { card: i }));
+      error(
+        format("DRAKOSHAS_UTILITY.Harrowing.Error.SuitUnknown", { card: i })
+      );
       break;
     }
     Logger.debug(
-      `runHarrowing: card ${i} suitRoll=${suitRoll.total} -> suit key="${suit.labelKey}"`,
+      `runHarrowing: card ${i} suitRoll=${suitRoll.total} -> suit key="${suit.labelKey}"`
     );
 
     const effectSource = buildHarrowingEffectSource({
@@ -174,7 +190,7 @@ export async function runHarrowing(): Promise<void> {
       rollTotal: roll.total,
       degree,
       suit,
-      ritualRank,
+      ritualRank
     });
 
     try {
@@ -184,14 +200,14 @@ export async function runHarrowing(): Promise<void> {
       error(
         format("DRAKOSHAS_UTILITY.Harrowing.Error.EffectFailed", {
           suit: game.i18n.localize(suit.labelKey),
-          message: (err as Error).message,
-        }),
+          message: (err as Error).message
+        })
       );
       break;
     }
   }
 
-  Logger.info(
-    `Harrowing finished: applied=${appliedCount}, interrupted=${interruptedByCriticalFailure}`,
+  Logger.debug(
+    `Harrowing finished: applied=${appliedCount}, interrupted=${interruptedByCriticalFailure}`
   );
 }

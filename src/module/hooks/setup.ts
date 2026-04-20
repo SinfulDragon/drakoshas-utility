@@ -5,9 +5,7 @@ export function registerSetupHook(): void {
   Logger.debug("registerSetupHook: attaching setup handler");
 
   Hooks.once("setup", () => {
-    Logger.debug("setup hook: start");
-    Logger.info("Setup hook triggered");
     exposeApi();
-    Logger.debug("setup hook: end");
+    Logger.info("setup end");
   });
 }
