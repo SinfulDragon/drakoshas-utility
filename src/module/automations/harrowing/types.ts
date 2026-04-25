@@ -23,3 +23,7 @@ export interface HarrowingImmunityParams {
   caster: HarrowingCasterRef;
   ritualRank: number;
 }
+
+export interface HarrowingEffectFlags {
+  world?: { harrowing?: { immunity?: boolean } };
+}

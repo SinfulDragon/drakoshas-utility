@@ -8,14 +8,9 @@ export type HarrowingHandler = (
   source: PreCreate<EffectSource>
 ) => Promise<void>;
 
-export interface HarrowingHandlers {
-  applyEffect: HarrowingHandler;
-  applyImmunity: HarrowingHandler;
-}
-
 let socket: SocketlibSocket | null = null;
 
-export function registerSocketlibHook(handlers: HarrowingHandlers): void {
+export function registerSocketlibHook(handler: HarrowingHandler): void {
   Logger.debug("registerSocketlibHook: attaching socketlib.ready handler");
 
   Hooks.once("socketlib.ready", () => {
@@ -23,13 +18,9 @@ export function registerSocketlibHook(handlers: HarrowingHandlers): void {
     socket = socketlib.registerModule(moduleId());
     socket.register(
       "applyEffect",
-      handlers.applyEffect as (...args: never[]) => unknown
+      handler as (...args: never[]) => unknown
     );
-    socket.register(
-      "applyImmunity",
-      handlers.applyImmunity as (...args: never[]) => unknown
-    );
-    Logger.debug("socketlib handlers registered: [applyEffect, applyImmunity]");
+    Logger.debug("socketlib handler registered: [applyEffect]");
     Logger.info("socketlib module registered");
   });
 }

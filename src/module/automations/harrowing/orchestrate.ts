@@ -1,7 +1,9 @@
-import type { ActorPF2e, CreaturePF2e } from "@actor";
+import type { ActorPF2e } from "@actor";
 import type { EffectPF2e } from "@item";
 
 import { Logger } from "@/module/logger.ts";
+import { format, localize } from "../../i18n.ts";
+import { asCreature } from "../../pf2e/actor.ts";
 import { getRitualDC } from "../../pf2e/dc.ts";
 import { getMaxRitualRank } from "../../pf2e/ritual.ts";
 import { pickHarrowingSkill } from "../../pf2e/skill-selection.ts";
@@ -12,47 +14,25 @@ import {
   buildHarrowingImmunitySource
 } from "./effects.ts";
 import { SUIT_MAP } from "./suits.ts";
-import type { HarrowingCasterRef } from "./types.ts";
-
-interface HarrowingEffectFlags {
-  world?: { harrowing?: { immunity?: boolean } };
-}
-
-function asCreature(actor: ActorPF2e): CreaturePF2e | null {
-  if (!("skills" in actor)) return null;
-  if (typeof (actor as { skills?: unknown }).skills !== "object") return null;
-  return actor as unknown as CreaturePF2e;
-}
-
-function warn(message: string): void {
-  ui.notifications?.warn(message);
-  Logger.warn(message);
-}
-
-function error(message: string): void {
-  ui.notifications?.error(message);
-  Logger.error(message);
-}
-
-function localize(key: string): string {
-  return game.i18n.localize(key);
-}
-
-function format(key: string, data: Record<string, string | number>): string {
-  return game.i18n.format(key, data);
-}
+import type { HarrowingCasterRef, HarrowingEffectFlags } from "./types.ts";
 
 export async function runHarrowing(): Promise<void> {
   Logger.debug("runHarrowing: start");
   const controlled = canvas.tokens?.controlled ?? [];
   const casterToken = controlled[0];
   if (!casterToken)
-    return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectCaster"));
+    return Logger.warn(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectCaster")
+    );
   if (controlled.length > 1) {
-    return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.OnlyOneCaster"));
+    return Logger.warn(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Warn.OnlyOneCaster")
+    );
   }
   if (game.user.targets.size !== 1) {
-    return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectOneTarget"));
+    return Logger.warn(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Warn.SelectOneTarget")
+    );
   }
 
   const caster = casterToken.actor;
@@ -60,13 +40,15 @@ export async function runHarrowing(): Promise<void> {
   const target = targetToken?.actor ?? null;
 
   if (!caster || !target) {
-    return error(
+    return Logger.error(
       localize("DRAKOSHAS_UTILITY.Harrowing.Error.ActorsUnresolved")
     );
   }
   const creatureCaster = asCreature(caster);
   if (!creatureCaster) {
-    return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.NotCreature"));
+    return Logger.error(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Error.NotCreature")
+    );
   }
 
   Logger.debug(
@@ -91,12 +73,14 @@ export async function runHarrowing(): Promise<void> {
   );
 
   if (!Number.isFinite(ritualDC) || ritualDC < 0) {
-    return error(localize("DRAKOSHAS_UTILITY.Harrowing.Error.InvalidDC"));
+    return Logger.error(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Error.InvalidDC")
+    );
   }
 
   const selection = pickHarrowingSkill(creatureCaster);
   if (!selection) {
-    return error(
+    return Logger.error(
       localize("DRAKOSHAS_UTILITY.Harrowing.Error.InsufficientSkill")
     );
   }
@@ -111,7 +95,9 @@ export async function runHarrowing(): Promise<void> {
   });
 
   if (immuneEffect) {
-    return warn(localize("DRAKOSHAS_UTILITY.Harrowing.Warn.AlreadyImmune"));
+    return Logger.warn(
+      localize("DRAKOSHAS_UTILITY.Harrowing.Warn.AlreadyImmune")
+    );
   }
 
   const casterRef: HarrowingCasterRef = { id: caster.id, name: caster.name };
@@ -139,7 +125,7 @@ export async function runHarrowing(): Promise<void> {
     });
 
     if (!roll) {
-      error(
+      Logger.error(
         format("DRAKOSHAS_UTILITY.Harrowing.Error.RollFailed", { card: i })
       );
       break;
@@ -156,9 +142,9 @@ export async function runHarrowing(): Promise<void> {
         ritualRank
       });
       try {
-        await socket.executeAsGM("applyImmunity", targetUuid, immunitySource);
+        await socket.executeAsGM("applyEffect", targetUuid, immunitySource);
       } catch (err) {
-        error(
+        Logger.error(
           format("DRAKOSHAS_UTILITY.Harrowing.Error.ImmunityFailed", {
             message: (err as Error).message
           })
@@ -175,7 +161,7 @@ export async function runHarrowing(): Promise<void> {
 
     const suit = SUIT_MAP[suitRoll.total];
     if (!suit) {
-      error(
+      Logger.error(
         format("DRAKOSHAS_UTILITY.Harrowing.Error.SuitUnknown", { card: i })
       );
       break;
@@ -197,7 +183,7 @@ export async function runHarrowing(): Promise<void> {
       await socket.executeAsGM("applyEffect", targetUuid, effectSource);
       appliedCount++;
     } catch (err) {
-      error(
+      Logger.error(
         format("DRAKOSHAS_UTILITY.Harrowing.Error.EffectFailed", {
           suit: game.i18n.localize(suit.labelKey),
           message: (err as Error).message
