@@ -18,9 +18,10 @@
     "format": "prettier . --write",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "foundry:configure": "fvtt configure",
     "foundry:launch": "fvtt launch",
-    "link": "node scripts/link-module.mjs",
+    "link:module": "node scripts/link-module.mjs",
     "version:sync": "node scripts/sync-version.mjs"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "@types/sortablejs": "^1.15.9",
     "@types/tooltipster": "^0.0.35",
     "@types/yaireo__tagify": "4.17.0",
+    "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^10.2.0",
     "globals": "^17.5.0",
     "pixi.js": "7.4.3",

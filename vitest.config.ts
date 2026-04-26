@@ -11,6 +11,24 @@ export default defineConfig({
     globals: true,
     environment: "node",
     setupFiles: ["./tests/setup/setup.ts"],
-    exclude: ["vendor/**", "node_modules/**"]
+    exclude: ["vendor/**", "node_modules/**"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+      include: ["src/module/**/*.ts", "src/rule-elements/**/*.ts"],
+      exclude: [
+        "src/module/hooks/ready.ts",
+        "src/module/hooks/setup.ts",
+        "src/module/hooks/init.ts",
+        "src/module/index.ts",
+        "src/module/logger.ts",
+      ],
+      thresholds: {
+        lines: 10,
+        branches: 10,
+        functions: 15,
+        statements: 10,
+      },
+    }
   }
 });

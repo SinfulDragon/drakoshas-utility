@@ -41,5 +41,6 @@
   "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>The target is immune to further Harrowing divinations for a month.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
   "DRAKOSHAS_UTILITY.RuleElement.Harrower.ExperiencedHarrower": "Experienced Harrower",
   "DRAKOSHAS_UTILITY.Settings.DebugLogging.Name": "Enable debug logging",
-  "DRAKOSHAS_UTILITY.Settings.DebugLogging.Hint": "Print verbose debug messages from Drakosha's Utility to the browser console. Leave disabled for normal play."
+  "DRAKOSHAS_UTILITY.Settings.DebugLogging.Hint": "Print verbose debug messages from Drakosha's Utility to the browser console. Leave disabled for normal play.",
+  "DRAKOSHAS_UTILITY.Socket.NotInitialized": "socketlib has not yet been initialized"
 }

@@ -1,6 +1,5 @@
 import { Logger } from "@/module/logger.ts";
 
-
 export function registerReadyHook(): void {
   Hooks.once("ready", () => {
     Logger.info(
@@ -8,5 +7,3 @@ export function registerReadyHook(): void {
     );
   });
 }
-
-

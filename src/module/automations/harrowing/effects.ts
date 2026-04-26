@@ -1,4 +1,5 @@
 import type { EffectSource } from "@item/effect/data.ts";
+import type { RuleElementSource } from "@module/rules/rule-element/data.ts";
 
 import type {
   HarrowingEffectParams,
@@ -9,7 +10,7 @@ interface BaseEffectParams {
   ritualRank: number;
   name: string;
   description: string;
-  rules?: unknown[];
+  rules?: RuleElementSource[];
   flags?: Record<string, unknown>;
 }
 

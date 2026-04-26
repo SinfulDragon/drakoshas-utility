@@ -7,7 +7,6 @@ export interface DrakoshaModuleApi {
 }
 
 declare module "@client/packages/module.mjs" {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export default interface Module {
     api?: DrakoshaModuleApi;
   }

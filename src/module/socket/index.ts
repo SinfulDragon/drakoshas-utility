@@ -27,7 +27,9 @@ export function registerSocketlibHook(handler: HarrowingHandler): void {
 
 export function getSocket(): SocketlibSocket {
   if (!socket) {
-    throw new Error(`${moduleId()}: socketlib ещё не инициализирован`);
+    throw new Error(
+      `${moduleId()}: ${game.i18n.localize("DRAKOSHAS_UTILITY.Socket.NotInitialized")}`
+    );
   }
   return socket;
 }

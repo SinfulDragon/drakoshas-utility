@@ -14,7 +14,7 @@ import {
   buildHarrowingImmunitySource
 } from "./effects.ts";
 import { SUIT_MAP } from "./suits.ts";
-import type { HarrowingCasterRef, HarrowingEffectFlags } from "./types.ts";
+import type { HarrowingCasterRef } from "./types.ts";
 
 export async function runHarrowing(): Promise<void> {
   Logger.debug("runHarrowing: start");
@@ -89,9 +89,11 @@ export async function runHarrowing(): Promise<void> {
   Logger.debug(`runHarrowing: picked skill="${skillLabel}"`);
 
   const effects: EffectPF2e<ActorPF2e>[] = target.itemTypes.effect ?? [];
-  const immuneEffect = effects.find((e) => {
-    const flags = e.flags as unknown as HarrowingEffectFlags;
-    return flags?.world?.harrowing?.immunity === true;
+  const immuneEffect = effects.find((e): boolean => {
+    const harrowing = e.flags?.world?.harrowing as
+      | { immunity?: boolean }
+      | undefined;
+    return harrowing?.immunity === true;
   });
 
   if (immuneEffect) {

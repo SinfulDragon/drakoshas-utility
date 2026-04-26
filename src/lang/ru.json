@@ -41,5 +41,6 @@
   "DRAKOSHAS_UTILITY.Harrowing.Effect.ImmunityDescription": "<p>Цель иммунна на месяц к дальнейшим гаданиям харро.</p><p><strong>{sourceLabel}:</strong> {casterName}</p><p><strong>{rankLabel}:</strong> {rank}</p>",
   "DRAKOSHAS_UTILITY.RuleElement.Harrower.ExperiencedHarrower": "Опытный гадатель",
   "DRAKOSHAS_UTILITY.Settings.DebugLogging.Name": "Включить debug-логирование",
-  "DRAKOSHAS_UTILITY.Settings.DebugLogging.Hint": "Выводить подробные debug-сообщения Drakosha's Utility в консоль браузера. Во время обычной игры лучше держать выключенным."
+  "DRAKOSHAS_UTILITY.Settings.DebugLogging.Hint": "Выводить подробные debug-сообщения Drakosha's Utility в консоль браузера. Во время обычной игры лучше держать выключенным.",
+  "DRAKOSHAS_UTILITY.Socket.NotInitialized": "socketlib ещё не инициализирован"
 }
